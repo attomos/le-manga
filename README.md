@@ -3,3 +3,8 @@
 Le manga (`lemanga`) is a CLI tool for download
 [Manga](http://en.wikipedia.org/wiki/Manga) from
 [mangafox](http://mangafox.me/) and serve it locally.
+
+# Credit
+
+Big thanks to [@macbaszii](https://github.com/macbaszii), I created `le-manga`
+as he suggested. Thanks man. :smile:
