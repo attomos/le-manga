@@ -1,3 +1,7 @@
+0.0.3 / 2014-04-27
+==================
+ * Integrated with commander.js
+
 0.0.2 / 2014-04-26
 ==================
  * Added credit to @macbaszii

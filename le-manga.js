@@ -86,6 +86,7 @@ function getImage(url) {
       console.log(imageUri.substring(imageUri.lastIndexOf('/')));
     }
     var outputFile =  outputDir + imageUri.substring(imageUri.lastIndexOf('/'));
+    console.log('Downloading ' + imageUri + ' to ' + outputFile);
     request(imageUri).pipe(fs.createWriteStream(outputFile).on('close', function() { }));
   });
 }
@@ -103,8 +104,8 @@ function main(title) {
       });
     },
     function(cb) {
-      rl.question(util.format('Which volume %s - %s %j ? ',
-          volumes[0], volumes[volumes.length - 1], volumes), function(answer) {
+      rl.question(util.format('Which volume? [%s - %s] : ',
+          volumes[0], volumes[volumes.length - 1]), function(answer) {
         volume = _.find(manga, function(m) {
           if (!isNaN(parseFloat(answer)) && isFinite(answer)) {
             var match = /(0*)(.+)/.exec(m.volume);
@@ -120,7 +121,7 @@ function main(title) {
       });
     },
     function(cb) {
-      rl.question(util.format('Which chapter %s - %s ? ',
+      rl.question(util.format('Which chapter? [%s - %s] : ',
             chapters[0], chapters[chapters.length - 1]), function(answer) {
         chapter = answer;
         cb(null, chapter);
