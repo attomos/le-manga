@@ -1,8 +1,8 @@
 {
   "name": "le-manga",
-  "version": "0.0.2",
-  "description": "CLI for download manga and serve it le.",
-  "main": "app.js",
+  "version": "0.0.3",
+  "description": "CLI program for download manga and serve it locally.",
+  "main": "le-manga.js",
   "scripts": {
     "test": "mocha -R spec"
   },
@@ -11,7 +11,7 @@
     "url": "https://github.com/attomos/le-manga"
   },
   "bin": {
-    "lemanga": "./app.js"
+    "le-manga": "./le-manga.js"
   },
   "keywords": [
     "manga",
@@ -29,7 +29,8 @@
     "request": "^2.34.0",
     "async": "^0.7.0",
     "lodash": "^2.4.1",
-    "mkdirp": "^0.4.0"
+    "mkdirp": "^0.4.0",
+    "commander": "^2.2.0"
   },
   "devDependencies": {
     "mocha": "^1.18.2"

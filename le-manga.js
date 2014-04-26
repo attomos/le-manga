@@ -1,12 +1,14 @@
 #!/usr/bin/env node
+
 var fs = require('fs');
 var _ = require('lodash');
 var util = require('util');
+var async = require('async');
 var mkdirp = require('mkdirp');
 var cheerio = require('cheerio');
 var request = require('request');
-var async = require('async');
 var readline = require('readline');
+var program = require('commander');
 
 var DEBUG = false;
 
@@ -72,7 +74,7 @@ function getMangaData(url, cb) {
 
 function getImage(url) {
   request({
-    uri: url,
+    url: url,
     pool: {
       maxSockets: 100
     }
@@ -87,25 +89,22 @@ function getImage(url) {
     request(imageUri).pipe(fs.createWriteStream(outputFile).on('close', function() { }));
   });
 }
-function main() {
+function main(title) {
   async.series([
     function(cb) {
-      rl.question('What manga would you like to download? ', function(answer) {
-        title = answer;
-        getMangaData(getMangaUrl(title), function(err, data) {
-          if (data.length > 0) {
-            manga = data;
-            volumes = _.sortBy(_.pluck(data, 'volume'), function(vol) { return vol; });
-            cb(null, title);
-          } else {
-            cb('Cannot find ' + title, null);
-          }
-        });
+      getMangaData(getMangaUrl(title), function(err, data) {
+        if (data.length > 0) {
+          manga = data;
+          volumes = _.sortBy(_.pluck(data, 'volume'), function(vol) { return vol; });
+          cb(null, title);
+        } else {
+          cb('Cannot find ' + title, null);
+        }
       });
     },
     function(cb) {
-      rl.question(util.format('Which volume %s - %s ? ',
-          volumes[0], volumes[volumes.length - 1]), function(answer) {
+      rl.question(util.format('Which volume %s - %s %j ? ',
+          volumes[0], volumes[volumes.length - 1], volumes), function(answer) {
         volume = _.find(manga, function(m) {
           if (!isNaN(parseFloat(answer)) && isFinite(answer)) {
             var match = /(0*)(.+)/.exec(m.volume);
@@ -116,6 +115,7 @@ function main() {
           }
         });
         chapters = getChapters(volume.startChapter, volume.endChapter);
+        console.log(chapters);
         cb(null, volume);
       });
     },
@@ -159,7 +159,7 @@ function main() {
             return isNaN(p) || p === '0';
           });
           _.each(pages, function(p) {
-            getImage(chapterLink.replace('1.html', p + '.html'), 250);
+            getImage(chapterLink.replace('1.html', p + '.html'));
           });
         });
       }
@@ -167,6 +167,22 @@ function main() {
   );
 }
 
-if (require.main == module) {
-  main();
+function range(val) {
+  return val.split('..').map(Number);
+}
+
+program
+  .version('0.0.3')
+  .option('-t, --title <title>', 'Specify manga\'s title')
+  .option('-s, --serve', 'Serve downloaded manga locally')
+  .parse(process.argv);
+
+if (program.title) {
+  main(program.title);
+} else if (program.serve) {
+  console.log('Serving on port 3000');
+  rl.close();
+} else {
+  program.outputHelp();
+  rl.close();
 }
