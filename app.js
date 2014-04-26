@@ -17,7 +17,6 @@ var volumes = [];
 var volume = {};
 var chapters = [];
 var chapter = '';
-var page = '';
 
 function getBaseUrl(url) {
   var urlScheme = '://';

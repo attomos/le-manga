@@ -1,14 +1,17 @@
 {
-  "name": "local-manga",
+  "name": "le-manga",
   "version": "0.0.0",
-  "description": "CLI for download manga and serve it locally.",
+  "description": "CLI for download manga and serve it le.",
   "main": "app.js",
   "scripts": {
     "test": "mocha -R spec"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/attomos/local-manga"
+    "url": "https://github.com/attomos/le-manga"
+  },
+  "bin": {
+    "lemanga": "./app.js"
   },
   "keywords": [
     "manga",
@@ -18,9 +21,9 @@
   "author": "attomos",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/attomos/local-manga/issues"
+    "url": "https://github.com/attomos/le-manga/issues"
   },
-  "homepage": "https://github.com/attomos/local-manga",
+  "homepage": "https://github.com/attomos/le-manga",
   "dependencies": {
     "cheerio": "^0.15.0",
     "request": "^2.34.0",
