@@ -1,0 +1,33 @@
+{
+  "name": "local-manga",
+  "version": "0.0.0",
+  "description": "CLI for download manga and serve it locally.",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/attomos/local-manga"
+  },
+  "keywords": [
+    "manga",
+    "downloader",
+    "webcrawler"
+  ],
+  "author": "attomos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/attomos/local-manga/issues"
+  },
+  "homepage": "https://github.com/attomos/local-manga",
+  "dependencies": {
+    "cheerio": "^0.15.0",
+    "request": "^2.34.0",
+    "async": "^0.7.0",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "mocha": "^1.18.2"
+  }
+}
