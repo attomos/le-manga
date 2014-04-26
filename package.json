@@ -1,6 +1,6 @@
 {
   "name": "le-manga",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "CLI for download manga and serve it le.",
   "main": "app.js",
   "scripts": {
