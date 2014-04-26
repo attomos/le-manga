@@ -14,7 +14,7 @@ Le manga (`le-manga`) is a CLI tool for download
         $ le-manga -t "One Piece"
         $ Which volume? [01 - TBD] : 1
         $ Which chapter? [772 - 731] : 722
-        
+
 
 # Credit
 
