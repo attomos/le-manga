@@ -81,55 +81,60 @@ function getImage(url) {
     request(imageUri).pipe(fs.createWriteStream('output' + imageUri.substring(imageUri.lastIndexOf('/'))).on('close', function() { }));
   });
 }
-
-async.series([
-  function(cb) {
-    rl.question('What manga would you like to download? ', function(answer) {
-      title = answer;
-      getMangaData(getMangaUrl(title), function(err, data) {
-        if (data.length > 0) {
-          manga = data;
-          volumes = _.sortBy(_.pluck(data, 'volume'), function(vol) { return vol; });
-          cb(null, title);
-        } else {
-          cb('Cannot find ' + title, null);
-        }
+function main() {
+  async.series([
+    function(cb) {
+      rl.question('What manga would you like to download? ', function(answer) {
+        title = answer;
+        getMangaData(getMangaUrl(title), function(err, data) {
+          if (data.length > 0) {
+            manga = data;
+            volumes = _.sortBy(_.pluck(data, 'volume'), function(vol) { return vol; });
+            cb(null, title);
+          } else {
+            cb('Cannot find ' + title, null);
+          }
+        });
       });
-    });
-  },
-  function(cb) {
-    rl.question(util.format('Which volume %d - %d ?',
-        volumes[0], volumes[volumes.length - 1]), function(answer) {
-      volume = _.find(manga, { volumeInt: parseInt(answer, 10) });
-      chapters = getChapters(volume.startChapter, volume.endChapter);
-      cb(null, volume);
-    });
-  },
-  function(cb) {
-    rl.question(util.format('Which chapter %d - %d ?',
-          chapters[0], chapters[chapters.length - 1]), function(answer) {
-      chapter = answer;
-      cb(null, chapter);
-    });
-  }
-], function(err, data) {
-    if (err) {
-      console.log(err);
-    } else {
-      rl.close();
-      console.log(data);
-      var chapterLink = util.format('http://mangafox.me/manga/%s/v%s/c%s/1.html',
-          formatTitle(title), volume.volume, chapter);
-      request(chapterLink, function(err, res, body) {
-        $ = cheerio.load(body);
-        var pages = Object.keys($('select.m').first().children());
-        pages = _.reject(pages, function(p) {
-          return isNaN(p) || p === '0';
-        });
-        _.each(pages, function(p) {
-          getImage(chapterLink.replace('1.html', p + '.html'), 250);
-        });
+    },
+    function(cb) {
+      rl.question(util.format('Which volume %d - %d ?',
+          volumes[0], volumes[volumes.length - 1]), function(answer) {
+        volume = _.find(manga, { volumeInt: parseInt(answer, 10) });
+        chapters = getChapters(volume.startChapter, volume.endChapter);
+        cb(null, volume);
+      });
+    },
+    function(cb) {
+      rl.question(util.format('Which chapter %d - %d ?',
+            chapters[0], chapters[chapters.length - 1]), function(answer) {
+        chapter = answer;
+        cb(null, chapter);
       });
     }
-  }
-);
+  ], function(err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        rl.close();
+        console.log(data);
+        var chapterLink = util.format('http://mangafox.me/manga/%s/v%s/c%s/1.html',
+            formatTitle(title), volume.volume, chapter);
+        request(chapterLink, function(err, res, body) {
+          $ = cheerio.load(body);
+          var pages = Object.keys($('select.m').first().children());
+          pages = _.reject(pages, function(p) {
+            return isNaN(p) || p === '0';
+          });
+          _.each(pages, function(p) {
+            getImage(chapterLink.replace('1.html', p + '.html'), 250);
+          });
+        });
+      }
+    }
+  );
+}
+
+if (require.main == module) {
+  main();
+}
