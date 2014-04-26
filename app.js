@@ -2,10 +2,13 @@
 var fs = require('fs');
 var _ = require('lodash');
 var util = require('util');
+var mkdirp = require('mkdirp');
 var cheerio = require('cheerio');
 var request = require('request');
 var async = require('async');
 var readline = require('readline');
+
+var DEBUG = false;
 
 var rl = readline.createInterface({
   input: process.stdin,
@@ -18,6 +21,7 @@ var volumes = [];
 var volume = {};
 var chapters = [];
 var chapter = '';
+var outputDir = '';
 
 function getBaseUrl(url) {
   var urlScheme = '://';
@@ -38,19 +42,18 @@ String.prototype.join = function(str) {
   return this.split(' ').join(str);
 };
 
-function formatTitle(title) {
+function safeTitle(title) {
   return title.join('_').toLowerCase();
 }
 
 function getMangaUrl(title) {
-  return util.format('http://mangafox.me/manga/%s/', formatTitle(title));
+  return util.format('http://mangafox.me/manga/%s/', safeTitle(title));
 }
 
 function extractVolumeData(text) {
   var match = /Volume (\w+) Chapter (\d+) - (\d+)/.exec(text);
   return {
     volume:       match[1],
-    volumeInt:    parseInt(match[1], 10),
     startChapter: match[2],
     endChapter:   match[3]
   };
@@ -76,9 +79,12 @@ function getImage(url) {
   }, function(err, res, body) {
     $ = cheerio.load(body);
     var imageUri = $('#viewer').children().find('img').first().attr('src');
-    console.log(imageUri);
-    console.log(imageUri.substring(imageUri.lastIndexOf('/')));
-    request(imageUri).pipe(fs.createWriteStream('output' + imageUri.substring(imageUri.lastIndexOf('/'))).on('close', function() { }));
+    if (DEBUG) {
+      console.log(imageUri);
+      console.log(imageUri.substring(imageUri.lastIndexOf('/')));
+    }
+    var outputFile =  outputDir + imageUri.substring(imageUri.lastIndexOf('/'));
+    request(imageUri).pipe(fs.createWriteStream(outputFile).on('close', function() { }));
   });
 }
 function main() {
@@ -98,18 +104,44 @@ function main() {
       });
     },
     function(cb) {
-      rl.question(util.format('Which volume %d - %d ?',
+      rl.question(util.format('Which volume %s - %s ? ',
           volumes[0], volumes[volumes.length - 1]), function(answer) {
-        volume = _.find(manga, { volumeInt: parseInt(answer, 10) });
+        volume = _.find(manga, function(m) {
+          if (!isNaN(parseFloat(answer)) && isFinite(answer)) {
+            var match = /(0*)(.+)/.exec(m.volume);
+            var volumeInt = match[2];
+            return parseInt(m.volume, 10) === parseInt(volumeInt, 10);
+          } else {
+            return m.volume === answer;
+          }
+        });
         chapters = getChapters(volume.startChapter, volume.endChapter);
         cb(null, volume);
       });
     },
     function(cb) {
-      rl.question(util.format('Which chapter %d - %d ?',
+      rl.question(util.format('Which chapter %s - %s ? ',
             chapters[0], chapters[chapters.length - 1]), function(answer) {
         chapter = answer;
         cb(null, chapter);
+      });
+    },
+    function(cb) {
+      rl.question(util.format('Enter output directory: (%s) ', safeTitle(title)), function(answer) {
+        outputDir = util.format('./%s', answer.length === 0 ? safeTitle(title) : answer);
+        fs.exists(outputDir, function(exists) {
+          if (!exists) {
+            mkdirp(outputDir, function(err) {
+              if (err) {
+                cb(err, null);
+              } else {
+                cb(null, outputDir);
+              }
+            });
+          } else {
+            cb(null, outputDir);
+          }
+        });
       });
     }
   ], function(err, data) {
@@ -119,7 +151,7 @@ function main() {
         rl.close();
         console.log(data);
         var chapterLink = util.format('http://mangafox.me/manga/%s/v%s/c%s/1.html',
-            formatTitle(title), volume.volume, chapter);
+            safeTitle(title), volume.volume, chapter);
         request(chapterLink, function(err, res, body) {
           $ = cheerio.load(body);
           var pages = Object.keys($('select.m').first().children());
