@@ -1,7 +1,7 @@
-var should = require('should');
+var assert = require('assert');
 
 describe('Test', function() {
   it('should pass', function() {
-    'a'.should.equal('a');
+    'a'.assert.equal('a');
   });
 });

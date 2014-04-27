@@ -2,7 +2,6 @@
 ==================
  * Revamped the prompt message and added details to README.md
  * Integrated with commander.js
- * Integrated with commander.js
 
 0.0.2 / 2014-04-26
 ==================

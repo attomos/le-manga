@@ -1,24 +1,24 @@
 {
   "name": "le-manga",
   "version": "0.0.3",
-  "description": "CLI program for download manga and serve it locally.",
-  "main": "le-manga.js",
+  "description": "CLI for download manga and serve it locally.",
+  "main": "bin/le-manga.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec test/*-test.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/attomos/le-manga"
+    "url": "git@github.com:attomos/le-manga.git"
   },
   "bin": {
-    "le-manga": "./le-manga.js"
+    "le-manga": "bin/le-manga.js"
   },
   "keywords": [
     "manga",
     "downloader",
     "webcrawler"
   ],
-  "author": "Natatphoom Ch.",
+  "author": "Nattaphoom Ch. <attomos@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/attomos/le-manga/issues"
