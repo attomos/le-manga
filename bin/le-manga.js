@@ -168,10 +168,6 @@ function main(title) {
   );
 }
 
-function range(val) {
-  return val.split('..').map(Number);
-}
-
 program
   .version('0.0.3')
   .option('-t, --title <title>', 'Specify manga\'s title')
