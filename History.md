@@ -1,6 +1,7 @@
 0.0.4 / 2014-04-27
 ==================
 
+ * Use version from package.json
  * Removed debugging log.
  * Created bin directory and modularized the library a bit.
  * Removed unused method range.
