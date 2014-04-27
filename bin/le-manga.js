@@ -78,7 +78,7 @@ function main(title) {
 }
 
 program
-  .version('0.0.3')
+  .version(require('../package.json').version)
   .option('-t, --title <title>', 'Specify manga\'s title')
   .option('-s, --serve', 'Serve downloaded manga locally')
   .parse(process.argv);
