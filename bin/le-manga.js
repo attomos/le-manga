@@ -67,13 +67,12 @@ function main(title) {
   ], function(err, data) {
       if (err) {
         console.log(err);
-        rl.close();
         process.exit(1);
       } else {
         console.log(data);
         lm.startDownload();
-        rl.close();
       }
+      rl.close();
     }
   );
 }
