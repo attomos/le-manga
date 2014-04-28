@@ -1,4 +1,4 @@
-# Le manga [![Build Status](https://secure.travis-ci.org/attomos/le-manga.svg?branch=master)](http://travis-ci.org/attomos/le-manga)
+# Le manga [![Build Status](https://secure.travis-ci.org/attomos/le-manga.svg?branch=master)](http://travis-ci.org/attomos/le-manga) [![NPM version](https://badge.fury.io/js/le-manga.svg)](http://badge.fury.io/js/le-manga)
 
 Le manga (`le-manga`) is a CLI tool for download
 [Manga](http://en.wikipedia.org/wiki/Manga) from
