@@ -14,7 +14,7 @@ var rl = readline.createInterface({
 });
 
 function isNotANumber(n) {
-  return isNaN(parseFloat(n) || !isFinite(n));
+  return isNaN(parseFloat(n)) || !isFinite(n);
 }
 
 
@@ -51,24 +51,29 @@ function main(title) {
         volumePrompt = util.format(volumeFmt, volumes[0],
                                    volumes[volumes.length - 1]);
       }
-      volumePrompt += ' (* for all) > ';
       rl.question(volumePrompt, function(answer) {
-        if (answer === '*') {
-          lm.volume = answer;
-          cb(null, '*');
-        } else {
-          lm.chapters = lm.getChapterRange(answer);
-          cb(null, lm.volume);
-        }
+        lm.chapters = lm.getChapterRange(answer);
+        cb(null, lm.volume);
       });
     },
 
     function(cb) {
-      if (typeof lm.volume === 'string') {
-        return cb(null, lm.chapter);
+      var chapters = lm.chapters;
+      var chapterFmt = 'Which chapter ';
+      var chapterPrompt = '';
+      var last = chapters[chapters.length - 1];
+      if (isNotANumber(last)) {
+        chapterFmt += '[%s - %s, %s]';
+        chapterPrompt = util.format(chapterFmt, chapters[0],
+                                   chapters[chapters.length - 2],
+                                   chapters[chapters.length - 1]);
+      } else {
+        chapterFmt += '[%s - %s]';
+        chapterPrompt = util.format(chapterFmt, chapters[0],
+                                   chapters[chapters.length - 1]);
       }
-      rl.question(util.format('Which chapter? [%s - %s] : ', lm.chapters[0],
-            lm.chapters[lm.chapters.length - 1]), function(answer) {
+      chapterPrompt += ' (* for all) : ';
+      rl.question(chapterPrompt, function(answer) {
         lm.chapter = answer;
         cb(null, lm.chapter);
       });
@@ -78,25 +83,29 @@ function main(title) {
       var st = lm.getSafeTitle(title);
       rl.question(util.format('Enter output directory: (%s) ',
             st), function(answer) {
+        var outputDir = answer.length === 0 ? st : lm.getSafeTitle(answer);
+        console.log(outputDir);
         if (lm.volume === '*') {
-          lm.output = util.format('./%s', answer.length === 0 ? st : answer);
-        } else if (lm.volume === '*') {
-          lm.output = util.format('./%s/%s', answer.length === 0 ? st : answer, lm.volume.volume);
+          lm.output = util.format('./%s', outputDir);
+        } else if (lm.chapter === '*') {
+          lm.output = util.format('./%s/%s', outputDir, lm.volume.volume);
         } else {
-          lm.output = util.format('./%s/%s/%s', answer.length === 0 ? st : answer, lm.volume.volume, lm.chapter);
+          lm.output = util.format('./%s/%s/%s', outputDir, lm.volume.volume, lm.chapter);
         }
+        for (var i = 0; i < lm.volumes.length; i++) {
+          // console.log(util.format('./%s', lm.volumes[i]));
+          // fs.mkdirp.sync(util.format('./%s', lm.volumes[i]));
+          // for (var i = 0; i < lm.chapters.length; i++)
+        }
+        process.exit();
         fs.exists(lm.output, function(exists) {
-          if (!exists) {
-            mkdirp(lm.output, function(err) {
-              if (err) {
-                cb(err, null);
-              } else {
-                cb(null, lm.output);
-              }
-            });
-          } else {
-            cb(null, lm.output);
-          }
+          mkdirp(lm.output, function(err) {
+            if (err) {
+              cb(err, null);
+            } else {
+              cb(null, lm.output);
+            }
+          });
         });
       });
     }
@@ -108,7 +117,7 @@ function main(title) {
       } else {
         console.log(data);
         if (lm.volume === '*') {
-          lm.downloadAllVolumes();
+          lm.downloadAllChapters();
         } else {
           lm.startDownload(lm.title, lm.volume, lm.chapter);
         }
