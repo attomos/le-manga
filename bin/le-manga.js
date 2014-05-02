@@ -42,12 +42,12 @@ function main(title) {
       var volumePrompt = '';
       var last = volumes[volumes.length - 1];
       if (isNotANumber(last)) {
-        volumeFmt += '[%s - %s, %s]';
+        volumeFmt += '[%s - %s, %s] ';
         volumePrompt = util.format(volumeFmt, volumes[0],
                                    volumes[volumes.length - 2],
                                    volumes[volumes.length - 1]);
       } else {
-        volumeFmt += '[%s - %s]';
+        volumeFmt += '[%s - %s] ';
         volumePrompt = util.format(volumeFmt, volumes[0],
                                    volumes[volumes.length - 1]);
       }
@@ -84,29 +84,15 @@ function main(title) {
       rl.question(util.format('Enter output directory: (%s) ',
             st), function(answer) {
         var outputDir = answer.length === 0 ? st : lm.getSafeTitle(answer);
-        console.log(outputDir);
-        if (lm.volume === '*') {
-          lm.output = util.format('./%s', outputDir);
-        } else if (lm.chapter === '*') {
-          lm.output = util.format('./%s/%s', outputDir, lm.volume.volume);
+        lm.output = outputDir;
+        if (lm.chapter === '*') {
+          for (var j = 0; j < lm.chapters.length; j++) {
+            mkdirp.sync(util.format('./%s/%s/%s', outputDir, lm.volume.volume, lm.chapters[j]));
+          }
         } else {
-          lm.output = util.format('./%s/%s/%s', outputDir, lm.volume.volume, lm.chapter);
+          mkdirp.sync(util.format('./%s/%s/%s', outputDir, lm.volume.volume, lm.chapter));
         }
-        for (var i = 0; i < lm.volumes.length; i++) {
-          // console.log(util.format('./%s', lm.volumes[i]));
-          // fs.mkdirp.sync(util.format('./%s', lm.volumes[i]));
-          // for (var i = 0; i < lm.chapters.length; i++)
-        }
-        process.exit();
-        fs.exists(lm.output, function(exists) {
-          mkdirp(lm.output, function(err) {
-            if (err) {
-              cb(err, null);
-            } else {
-              cb(null, lm.output);
-            }
-          });
-        });
+        cb(null, lm.output);
       });
     }
 
@@ -116,10 +102,11 @@ function main(title) {
         process.exit(1);
       } else {
         console.log(data);
-        if (lm.volume === '*') {
+        if (lm.chapter === '*') {
           lm.downloadAllChapters();
         } else {
-          lm.startDownload(lm.title, lm.volume, lm.chapter);
+          lm.startDownload(lm.title, lm.volume, lm.chapter, function(err) {
+          });
         }
       }
       rl.close();
