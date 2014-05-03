@@ -1,3 +1,13 @@
+0.0.5 / 2014-05-03
+==================
+
+ * Allow * for download all chapters.
+ * Working with callbacks.
+ * Fixed LM.prototype.getChapterRange function.
+ * Fixed isNotANumber function and download all volumes is too harsh.
+ * Making use of mkdirp package :)
+ * Added npm version badge fury.
+
 0.0.4 / 2014-04-27
 ==================
 
