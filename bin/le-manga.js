@@ -42,12 +42,12 @@ function main(title) {
       var volumePrompt = '';
       var last = volumes[volumes.length - 1];
       if (isNotANumber(last)) {
-        volumeFmt += '[%s - %s, %s] ';
+        volumeFmt += '[%s - %s, %s] : ';
         volumePrompt = util.format(volumeFmt, volumes[0],
                                    volumes[volumes.length - 2],
                                    volumes[volumes.length - 1]);
       } else {
-        volumeFmt += '[%s - %s] ';
+        volumeFmt += '[%s - %s] : ';
         volumePrompt = util.format(volumeFmt, volumes[0],
                                    volumes[volumes.length - 1]);
       }
