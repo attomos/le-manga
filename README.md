@@ -10,10 +10,12 @@ Le manga (`le-manga`) is a CLI tool for download
 
 # Usage
 
-        $ # Wanna read One Piece from MangaFox?
+Wanna read One Piece from MangaFox?
+
         $ le-manga -t "One Piece"
-        $ Which volume? [01 - TBD] : 1
-        $ Which chapter? [772 - 731] : 722
+        Which volume [01 - 73, TBD] : 1
+        Which chapter [1 - 8] (* for all) : *
+        Enter output directory: (one_piece)
 
 
 # Credit
