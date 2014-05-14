@@ -51,10 +51,16 @@ function main(title) {
         volumePrompt = util.format(volumeFmt, volumes[0],
                                    volumes[volumes.length - 1]);
       }
-      rl.question(volumePrompt, function(answer) {
-        lm.chapters = lm.getChapterRange(answer);
+      if (volumes[0] === 'Not Available') {
+        console.log('No volume available');
+        lm.chapters = lm.getChapterRange('Not Available');
         cb(null, lm.volume);
-      });
+      } else {
+        rl.question(volumePrompt, function(answer) {
+          lm.chapters = lm.getChapterRange(answer);
+          cb(null, lm.volume);
+        });
+      }
     },
 
     function(cb) {
