@@ -1,3 +1,11 @@
+0.0.6 / 2014-05-15
+==================
+ * Added test for INUGAMI-SAN TO SARUTOBI-KUN WA NAKA GA WARUI.
+ * Fixed readline prompt bug when manga's volume is not available.
+ * Changed regexp in extractVolumeData function to handle `Volume Not Available` correctly.
+ * Fixed prompt message.
+ * Updated README.md
+
 0.0.5 / 2014-05-03
 ==================
 
