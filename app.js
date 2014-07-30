@@ -17,3 +17,4 @@ app.use(function *() {
 });
 
 app.listen(3000);
+console.log('le-manga running on http://0.0.0.0:3000');
