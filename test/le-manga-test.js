@@ -2,7 +2,7 @@ var LM = require('../lib/le-manga.js');
 var assert = require('assert');
 
 describe('When download', function() {
-  describe('INUGAMI-SAN TO SARUTOBI-KUN WA NAKA GA WARUI with no volume available chapter 1 - 4', function() {
+  describe('INUGAMI-SAN TO SARUTOBI-KUN WA NAKA GA WARUI with "volume not available", chapter 1 - 5', function() {
     it('should be okay', function(done) {
       var lm = new LM();
       var url = lm.getMangaUrl('inugami_san_to_sarutobi_kun_wa_naka_ga_warui');
@@ -12,7 +12,7 @@ describe('When download', function() {
         var endChapter = data[0].endChapter;
         if (volume === 'Not Available') {
           assert.equal(startChapter, 1);
-          assert.equal(endChapter, 4);
+          assert.equal(endChapter, 5);
         }
         done();
       });
