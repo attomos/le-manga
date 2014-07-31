@@ -6,6 +6,11 @@ Le manga (`le-manga`) is a CLI tool for download
 
 # Installation
 
+le-manga currently requires node 0.11.x for [Koa](http://koajs.com/).
+You may have to install [n](https://github.com/visionmedia/n), a node version manager to install 0.11.x:
+
+        $ npm install -g n
+        $ n 0.11.12
         $ npm install -g le-manga
 
 # Usage
