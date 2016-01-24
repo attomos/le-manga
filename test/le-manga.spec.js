@@ -1,21 +1,55 @@
 var LM = require('../lib/le-manga.js');
 var assert = require('assert');
 
-describe('When download', function () {
-  describe('INUGAMI-SAN TO SARUTOBI-KUN WA NAKA GA WARUI with "volume not available", chapter 1 - 16', function () {
-    it('should have 16 chapters in total', function (done) {
-      var lm = new LM();
-      var url = lm.getMangaUrl('inugami_san_to_sarutobi_kun_wa_naka_ga_warui');
-      lm.getMangaData(url, function (err, data) {
-        var volume = data[0].volume;
-        var startChapter = data[0].startChapter;
-        var endChapter = data[0].endChapter;
-        if (volume === 'Not Available') {
-          assert.equal(startChapter, 1);
-          assert.equal(endChapter, 16);
-        }
-        done();
-      });
+describe('LM', function () {
+  var lm;
+  beforeEach(function () {
+    lm = new LM();
+  });
+
+  describe('getBaseUrl', function () {
+    it('should return correct base URL when the URL is correct', function () {
+      var expected = 'http://www.mangafox.me';
+      var actual = lm.getBaseUrl('http://www.mangafox.me');
+      assert.equal(actual, expected);
     });
+
+    it('should return correct base URL when tghe URL has no protocol', function () {
+      var expected = 'http://www.mangafox.me';
+      var actual = lm.getBaseUrl('www.mangafox.me');
+      assert.equal(actual, expected);
+    });
+
+    it('should return empty string when called with empty string', function () {
+      var expected = '';
+      var actual = lm.getBaseUrl('');
+      assert.equal(actual, expected);
+    });
+  });
+
+  xdescribe('getChapterRange', function () {
+  });
+
+  describe('getSafeTitle', function () {
+    it('should return snake case string', function () {
+      var expected = 'some_random_manga';
+      var actual = lm.getSafeTitle('Some Random MANGA');
+      assert.equal(actual, expected);
+    });
+
+    xit('should strip out exclaimation marks, punctuations, and alike', function () {
+    });
+  });
+
+  describe('getMangaUrl', function () {
+  });
+
+  describe('extractVolumeData', function () {
+  });
+
+  describe('getmangaData', function () {
+  });
+
+  describe('getVolumeRange', function () {
   });
 });
