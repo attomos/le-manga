@@ -9,4 +9,4 @@ matrix:
     - node_js: 0.11
 
 after_success:
-  - ./bin/codecov -e TRAVIS_NODE_VERSION
+  - ./node_modules/.bin/codecov
