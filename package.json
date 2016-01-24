@@ -28,7 +28,6 @@
     "async": "^0.7.0",
     "cheerio": "^0.15.0",
     "co-views": "latest",
-    "codecov": "^1.0.1",
     "commander": "^2.2.0",
     "ejs": "^1.0.0",
     "koa": "latest",
@@ -38,6 +37,7 @@
     "request": "^2.34.0"
   },
   "devDependencies": {
+    "coveralls": "^2.11.6",
     "istanbul": "^0.4.2",
     "mocha": "^1.18.2"
   }
