@@ -4,7 +4,7 @@
   "description": "CLI for download manga and serve it locally.",
   "main": "bin/le-manga.js",
   "scripts": {
-    "test": "mocha -R spec test/*-test.js"
+    "test": "mocha -R spec test/*.spec.js"
   },
   "repository": {
     "type": "git",
