@@ -29,7 +29,7 @@
     "cheerio": "^0.15.0",
     "co-views": "latest",
     "commander": "^2.2.0",
-    "ejs": "^1.0.0",
+    "ejs": "^2.5.5",
     "koa": "latest",
     "koa-route": "^1.1.4",
     "lodash": "^2.4.1",
